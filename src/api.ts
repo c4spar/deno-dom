@@ -13,27 +13,26 @@ import { HTMLCollection } from "./dom/html-collection.ts";
 // Prevent childNodes and HTMLCollections from being seen as an arrays
 const oldHasInstance = Array[Symbol.hasInstance];
 Object.defineProperty(Array, Symbol.hasInstance, {
-  value: (value: any): boolean => {
+  value: function (value: any): boolean {
     switch (value?.constructor) {
       case HTMLCollection:
       case NodeList:
         return false;
       default:
-        return oldHasInstance.call(Array, value);
+        return oldHasInstance.call(this, value);
     }
   },
 });
 
 const oldIsArray = Array.isArray;
 Object.defineProperty(Array, "isArray", {
-  value: (value: any): boolean => {
+  value: function (value: any): boolean {
     switch (value?.constructor) {
       case HTMLCollection:
       case NodeList:
         return false;
       default:
-        return oldIsArray.call(Array, value);
+        return oldIsArray.call(this, value);
     }
   },
 });
-
